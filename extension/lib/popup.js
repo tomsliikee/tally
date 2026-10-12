@@ -33,13 +33,15 @@ function resetSentence(window, now) {
 }
 
 export class Popup {
-    constructor({style, theme}, {onProbeMinutes, onStyle}) {
+    constructor({style, theme}, {onProbeNow, onProbeMinutes, onStyle}) {
         // The marks are drawn in a scheme, one style in one theme.
         this._theme = `${style}-${theme}`;
         this._light = theme;
+        this._onProbeNow = onProbeNow;
         this._onProbeMinutes = onProbeMinutes;
         this._onStyle = onStyle;
-        this._state = {limits: null, limitsAt: null, problem: null, days: null, probeMinutes: null, style: null};
+        this._state = {limits: null, limitsAt: null, problem: null, days: null, probing: false,
+            probeMinutes: null, style: null};
         this._entrance = null;
         this._wave = null;
 
@@ -47,11 +49,10 @@ export class Popup {
         this._buildSession();
         this._buildWeek();
         this._buildLocal();
-        this._footer = text('aside', {muted: true, wrap: true});
-        this._footer.add_style_class_name('cu-footer');
-        this.actor.add_child(this._footer);
+        this._buildFooter();
         this._buildOverflow();
         this._buildRefresh();
+        this._syncAsk();
         this._render(1);
     }
 
@@ -117,6 +118,31 @@ export class Popup {
         tile.add_child(this._dayLabels);
         tile.add_child(note);
         this.actor.add_child(tile);
+    }
+
+    // Says how old the limits are, and asks for new ones beside it.
+    _buildFooter() {
+        const row = new St.BoxLayout({style_class: 'cu-footer', x_expand: true});
+        this._footer = text('aside', {muted: true, expand: true, wrap: true});
+        this._askCaption = text('body-strong');
+        this._ask = new St.Button({
+            style_class: 'cu-ask',
+            child: this._askCaption,
+            can_focus: true,
+            y_align: Clutter.ActorAlign.CENTER,
+        });
+        this._ask.connect('clicked', () => this._onProbeNow());
+        row.add_child(this._footer);
+        row.add_child(this._ask);
+        this.actor.add_child(row);
+    }
+
+    // A request takes a few seconds, so the button shows that one is running.
+    _syncAsk() {
+        const {probing} = this._state;
+        this._askCaption.text = probing ? 'Asking…' : 'Ask now';
+        this._ask.reactive = !probing;
+        this._ask.can_focus = !probing;
     }
 
     // The setting is not needed day to day, so it waits behind a chevron at
@@ -253,6 +279,7 @@ export class Popup {
         this._state = state;
         this._syncDayLabels();
         this._syncSegments();
+        this._syncAsk();
         if (!this._entrance)
             this._render(1);
     }

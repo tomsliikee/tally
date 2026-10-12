@@ -19,7 +19,7 @@ const PANEL_THEME = 'dark';
 
 export const Indicator = GObject.registerClass(
 class Indicator extends PanelMenu.Button {
-    _init({onOpen, onProbeMinutes, onStyle}) {
+    _init({onOpen, onProbeNow, onProbeMinutes, onStyle}) {
         super._init(0.5, 'Tally');
         this._shown = 0;
         this._tween = null;
@@ -38,7 +38,7 @@ class Indicator extends PanelMenu.Button {
 
         this._interface = new Gio.Settings({schema_id: 'org.gnome.desktop.interface'});
         this._theme = this._readTheme();
-        this._popup = new Popup({style: this._style, theme: this._theme}, {onProbeMinutes, onStyle});
+        this._popup = new Popup({style: this._style, theme: this._theme}, {onProbeNow, onProbeMinutes, onStyle});
         this.menu.box.add_style_class_name(this._popupClass());
         this.menu.box.add_child(this._popup.actor);
 

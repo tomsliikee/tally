@@ -20,6 +20,7 @@ export default class TallyExtension extends Extension {
         });
         this._indicator = new Indicator({
             onOpen: () => this._controller.refresh(),
+            onProbeNow: () => this._controller.probeNow(),
             onProbeMinutes: minutes => this._controller.setProbeMinutes(minutes),
             onStyle: style => this._controller.setStyle(style),
         });

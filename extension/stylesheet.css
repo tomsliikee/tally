@@ -72,6 +72,13 @@
 
 .cu-footer {
     padding: 0 4px;
+    spacing: 12px;
+}
+
+.cu-ask {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 20px;
 }
 
 .cu-popup-blue-light {
@@ -100,6 +107,11 @@
 }
 
 .cu-popup-blue-light .cu-segment {
+    background-color: #dee1ff;
+    color: #0033c2;
+}
+
+.cu-popup-blue-light .cu-ask {
     background-color: #dee1ff;
     color: #0033c2;
 }
@@ -144,6 +156,11 @@
     color: #dee1ff;
 }
 
+.cu-popup-blue-dark .cu-ask {
+    background-color: #0033c2;
+    color: #dee1ff;
+}
+
 .cu-popup-blue-dark .cu-segment-selected {
     background-color: #b9c3ff;
     color: #00228b;
@@ -180,6 +197,11 @@
 }
 
 .cu-popup-violet-light .cu-segment {
+    background-color: #eaddff;
+    color: #5a00c6;
+}
+
+.cu-popup-violet-light .cu-ask {
     background-color: #eaddff;
     color: #5a00c6;
 }
@@ -224,6 +246,11 @@
     color: #eaddff;
 }
 
+.cu-popup-violet-dark .cu-ask {
+    background-color: #5a00c6;
+    color: #eaddff;
+}
+
 .cu-popup-violet-dark .cu-segment-selected {
     background-color: #d2bbff;
     color: #3f008e;
@@ -260,6 +287,11 @@
 }
 
 .cu-popup-green-light .cu-segment {
+    background-color: #67ff8d;
+    color: #005321;
+}
+
+.cu-popup-green-light .cu-ask {
     background-color: #67ff8d;
     color: #005321;
 }
@@ -304,6 +336,11 @@
     color: #67ff8d;
 }
 
+.cu-popup-green-dark .cu-ask {
+    background-color: #005321;
+    color: #67ff8d;
+}
+
 .cu-popup-green-dark .cu-segment-selected {
     background-color: #00e468;
     color: #003915;
@@ -340,6 +377,11 @@
 }
 
 .cu-popup-orange-light .cu-segment {
+    background-color: #ffdbd0;
+    color: #832700;
+}
+
+.cu-popup-orange-light .cu-ask {
     background-color: #ffdbd0;
     color: #832700;
 }
@@ -384,6 +426,11 @@
     color: #ffdbd0;
 }
 
+.cu-popup-orange-dark .cu-ask {
+    background-color: #832700;
+    color: #ffdbd0;
+}
+
 .cu-popup-orange-dark .cu-segment-selected {
     background-color: #ffb59c;
     color: #5c1900;
@@ -424,6 +471,11 @@
     color: #8f0044;
 }
 
+.cu-popup-pink-light .cu-ask {
+    background-color: #ffd9e1;
+    color: #8f0044;
+}
+
 .cu-popup-pink-light .cu-segment-selected {
     background-color: #ba005b;
     color: #ffffff;
@@ -460,6 +512,11 @@
 }
 
 .cu-popup-pink-dark .cu-segment {
+    background-color: #8f0044;
+    color: #ffd9e1;
+}
+
+.cu-popup-pink-dark .cu-ask {
     background-color: #8f0044;
     color: #ffd9e1;
 }

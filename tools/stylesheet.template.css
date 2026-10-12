@@ -70,6 +70,13 @@
 
 .cu-footer {
     padding: 0 $space-1;
+    spacing: $space-3;
+}
+
+.cu-ask {
+    height: 40px;
+    padding: 0 $space-4;
+    border-radius: $radius-large-increased;
 }
 
 /* themed */
@@ -100,6 +107,11 @@
 }
 
 .cu-popup .cu-segment {
+    background-color: $primary-container;
+    color: $on-primary-container;
+}
+
+.cu-popup .cu-ask {
     background-color: $primary-container;
     color: $on-primary-container;
 }

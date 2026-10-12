@@ -26,6 +26,7 @@ export class Controller {
         this._localSource = new LocalSource(scanPath);
         this._lastProbe = 0;
         this._lastScan = 0;
+        this._probing = false;
         this._timer = 0;
         this._destroyed = false;
         this._cancellable = new Gio.Cancellable();
@@ -33,7 +34,7 @@ export class Controller {
         this._style = parseSettings(null).style;
         // What was reported, before windows past their reset are emptied.
         this._reported = null;
-        this.state = {limits: null, limitsAt: null, problem: null, days: null,
+        this.state = {limits: null, limitsAt: null, problem: null, days: null, probing: false,
             probeMinutes: this._probeMinutes, style: this._style};
     }
 
@@ -105,6 +106,15 @@ export class Controller {
         this._refresh(MENU_PROBE_GAP_MS, MENU_SCAN_GAP_MS);
     }
 
+    // Called from the menu's button. The limits can change without a window
+    // ending, so the user can ask at once, whatever the gaps say.
+    probeNow() {
+        if (this._destroyed || this._probing)
+            return;
+        this._lastProbe = Date.now();
+        this._probe();
+    }
+
     _refresh(probeGap, scanGap) {
         if (this._destroyed)
             return;
@@ -121,9 +131,14 @@ export class Controller {
     }
 
     async _probe() {
+        if (this._probing)
+            return;
+        this._probing = true;
+        this._emit({});
         const result = await this._limitsSource.probe();
         if (this._destroyed)
             return;
+        this._probing = false;
         if (result.limits) {
             const at = Date.now();
             this._accept(result.limits, at);
@@ -176,6 +191,7 @@ export class Controller {
             ...change,
             probeMinutes: this._probeMinutes,
             style: this._style,
+            probing: this._probing,
             limits: reported ? rollOver(reported.limits, Date.now()) : null,
             limitsAt: reported ? reported.at : null,
         };
