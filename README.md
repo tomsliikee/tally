@@ -36,6 +36,7 @@ The screenshots on this page show sample data.
 - **A Travelling Wave:** A session at **100 %** turns its progress into a wave that moves while the menu is open.
 - **This Machine:** Today's **tokens**, their **estimated cost** at API list prices, and one bar for each of the last **7 days**.
 - **Your Own Pace:** How often the limits are asked for is set in the menu: every **5**, **15**, **30** or **60 minutes**, or only when the menu opens.
+- **A Look on Hover:** Resting the pointer on the top bar item shows the menu for as long as it stays there; a click holds it open.
 - **Ask Now:** A button beside the age of the limits asks Claude Code at once, for when the limits changed without a window ending.
 - **Out of Date, and Saying So:** When no fresh value can be had, the last one stays, dimmed, and one sentence says why.
 - **Five Colour Styles:** **Blue**, **violet**, **green**, **orange** and **pink**, each in light and dark.
@@ -238,6 +239,7 @@ flowchart TD
 | **Limits from a probe** | *tested* | Run on 2026-10-12, both with the week above its 75 % warning and, after a reset, with the session at 4 % and the week at 0 % |
 | **Limits from the status line** | *tested* | A sample record is picked up and parsed, and a real record written by Claude Code was found on 2026-10-12 |
 | **Probe interval and the chevron** | *tested* | Clicked in the headless shell; the timing itself was not waited out |
+| **Look on hover** | *tested* | A virtual pointer in the headless shell, over the overview: nothing when crossing, the menu after resting, gone on leaving, held by a click, no look after closing with a click on the item. Not tried over windows |
 | **Ask now** | *tested* | Clicked twice in the headless shell: one probe ran, the button read "Asking…" and was inert until the new limits were shown |
 | **Colour styles** | *tested* | The derived blue equals the design system's own tokens in all 52 values; all five styles rendered, one chosen by a click and saved |
 | **Pause when idle** | *tested* | In the headless shell with a 2-second threshold and a virtual pointer: no probe or scan while idle, both after the first input. Suspend and the lock screen were not tried |

@@ -1,7 +1,9 @@
-// The top bar item: a small ring and the session's percentage.
+// The top bar item: a small ring and the session's percentage. Resting the
+// pointer on it shows the menu for as long as it stays; a click holds it.
 
 import Clutter from 'gi://Clutter';
 import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import St from 'gi://St';
 
@@ -9,6 +11,7 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
 import * as Format from './format.js';
 import {LAYOUT_MS, animate} from './motion.js';
+import {PeekMenu} from './peek.js';
 import {Popup} from './popup.js';
 import {Ring} from './ring.js';
 import {styles} from './tokens.js';
@@ -16,12 +19,19 @@ import {styles} from './tokens.js';
 const STALE_OPACITY = 128;
 // The top bar is dark in both colour schemes, so its ring always is too.
 const PANEL_THEME = 'dark';
+// Long enough that crossing the item on the way elsewhere shows nothing.
+const HOVER_DELAY_MS = 300;
 
 export const Indicator = GObject.registerClass(
 class Indicator extends PanelMenu.Button {
     _init({onOpen, onProbeNow, onProbeMinutes, onStyle}) {
-        super._init(0.5, 'Tally');
+        // The menu is made here, not by the panel button, so it can peek.
+        super._init(0.5, 'Tally', true);
+        this.setMenu(new PeekMenu(this, 0.5));
         this._shown = 0;
+        this._open = false;
+        this._pending = 0;
+        this._rested = false;
         this._tween = null;
         this._style = styles[0];
 
@@ -45,14 +55,23 @@ class Indicator extends PanelMenu.Button {
         this._interface.connectObject('changed::color-scheme',
             () => this._applyScheme(this._style, this._readTheme()), this);
         this.menu.connect('open-state-changed', (_menu, open) => {
+            // A look that is held reports once more that it is open.
+            if (open === this._open)
+                return;
+            this._open = open;
             if (open) {
                 onOpen();
                 this._popup.play();
             } else {
                 this._popup.stop();
+                // Closed by a click on the item itself: the pointer still
+                // rests there, and that is no wish for a look.
+                this._rested = !this.menu.peeking && this._pointerInside();
             }
         });
+        this.connect('notify::hover', () => this._hoverChanged());
         this.connect('destroy', () => {
+            this._cancelPeek();
             this._tween?.stop();
             this._interface.disconnectObject(this);
         });
@@ -76,6 +95,35 @@ class Indicator extends PanelMenu.Button {
         if (state.style !== this._style)
             this._applyScheme(state.style, this._theme);
         this._popup.update(state);
+    }
+
+    _hoverChanged() {
+        this._cancelPeek();
+        if (!this.hover) {
+            this._rested = false;
+            this.menu.endPeek();
+            return;
+        }
+        if (this._rested)
+            return;
+        this._pending = GLib.timeout_add(GLib.PRIORITY_DEFAULT, HOVER_DELAY_MS, () => {
+            this._pending = 0;
+            this.menu.peek();
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    _cancelPeek() {
+        if (this._pending)
+            GLib.source_remove(this._pending);
+        this._pending = 0;
+    }
+
+    _pointerInside() {
+        const [x, y] = global.get_pointer();
+        const [left, top] = this.get_transformed_position();
+        const [width, height] = this.get_transformed_size();
+        return x >= left && x < left + width && y >= top && y < top + height;
     }
 
     _popupClass() {
