@@ -46,6 +46,9 @@ export class Popup {
         this._wave = null;
 
         this.actor = column('cu-content');
+        // The menu is destroyed before its owner hears of it, so the popup
+        // stops its own motion while its actors still exist.
+        this.actor.connect('destroy', () => this.stop());
         this._buildSession();
         this._buildWeek();
         this._buildLocal();

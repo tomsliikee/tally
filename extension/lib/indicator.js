@@ -54,7 +54,6 @@ class Indicator extends PanelMenu.Button {
         });
         this.connect('destroy', () => {
             this._tween?.stop();
-            this._popup.stop();
             this._interface.disconnectObject(this);
         });
     }
