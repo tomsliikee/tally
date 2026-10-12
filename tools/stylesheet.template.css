@@ -1,0 +1,115 @@
+.cu-indicator {
+    spacing: 6px;
+}
+
+.cu-indicator-label {
+    font-feature-settings: "tnum";
+}
+
+.cu-content {
+    width: 320px;
+    spacing: $space-3;
+}
+
+.cu-tile {
+    padding: $space-4;
+    spacing: $space-2;
+    border-radius: $radius-tile;
+}
+
+.cu-section {
+    padding: $space-2 $space-1 0 $space-1;
+}
+
+.cu-columns {
+    spacing: $space-5;
+}
+
+.cu-segments {
+    spacing: 2px;
+}
+
+/* Fully round means half the 40px height here; St draws 9999px badly. */
+.cu-segment {
+    height: 40px;
+}
+
+.cu-segment-first {
+    border-radius: $radius-large-increased $radius-small $radius-small $radius-large-increased;
+}
+
+.cu-segment-middle {
+    border-radius: $radius-small;
+}
+
+.cu-segment-last {
+    border-radius: $radius-small $radius-large-increased $radius-large-increased $radius-small;
+}
+
+.cu-segment-selected {
+    border-radius: $radius-large-increased;
+}
+
+.cu-setting {
+    padding-top: $space-2;
+}
+
+.cu-swatches {
+    spacing: $space-3;
+}
+
+.cu-swatch {
+    border-radius: $radius-large;
+}
+
+.cu-overflow {
+    width: 48px;
+    height: 28px;
+    border-radius: 14px;
+}
+
+.cu-footer {
+    padding: 0 $space-1;
+}
+
+/* themed */
+
+.cu-popup {
+    padding: $space-4;
+    border: none;
+    border-radius: $radius-extra-large;
+    background-color: $surface-container;
+    color: $on-surface;
+}
+
+.cu-popup .cu-tile {
+    background-color: $surface-bright;
+}
+
+.cu-popup .cu-tile-loud {
+    background-color: $primary-container;
+    color: $on-primary-container;
+}
+
+.cu-popup .cu-muted {
+    color: $on-surface-variant;
+}
+
+.cu-popup .cu-tile-loud .cu-muted {
+    color: $on-primary-container;
+}
+
+.cu-popup .cu-segment {
+    background-color: $primary-container;
+    color: $on-primary-container;
+}
+
+.cu-popup .cu-segment-selected {
+    background-color: $primary;
+    color: $on-primary;
+}
+
+.cu-popup .cu-overflow:hover,
+.cu-popup .cu-overflow:focus {
+    background-color: $surface-container-highest;
+}

@@ -1,0 +1,6 @@
+{
+    "uuid": "tally@thomashaiden",
+    "name": "Tally",
+    "description": "Shows your Claude plan limits in the top bar, and this machine's token usage in a menu.",
+    "shell-version": ["50"]
+}
