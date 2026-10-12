@@ -36,6 +36,7 @@ The screenshots on this page show sample data.
 - **A Travelling Wave:** A session at **100 %** turns its progress into a wave that moves while the menu is open.
 - **This Machine:** Today's **tokens**, their **estimated cost** at API list prices, and one bar for each of the last **7 days**.
 - **Your Own Pace:** How often the limits are asked for is set in the menu: every **5**, **15**, **30** or **60 minutes**, or only when the menu opens.
+- **Ask Now:** A button beside the age of the limits asks Claude Code at once, for when the limits changed without a window ending.
 - **Out of Date, and Saying So:** When no fresh value can be had, the last one stays, dimmed, and one sentence says why.
 - **Five Colour Styles:** **Blue**, **violet**, **green**, **orange** and **pink**, each in light and dark.
 - **Light and Dark:** The menu follows the system's colour scheme.
@@ -80,7 +81,7 @@ The limits are reported by **Claude Code**, in two ways.
 
 | Source | When | Cost |
 | :--- | :--- | :--- |
-| **Probe** | Every **5**, **15** (default), **30** or **60 minutes**, as set in the menu, and when the menu opens | One minimal **`claude -p`** call: about **700 input tokens** on the smallest model, from your plan |
+| **Probe** | Every **5**, **15** (default), **30** or **60 minutes**, as set in the menu, when the menu opens, and when **Ask now** is pressed | One minimal **`claude -p`** call: about **700 input tokens** on the smallest model, from your plan |
 | **Status line** | After every answer of a Claude Code session in a **terminal** | None |
 
 - **The Probe:** The extension runs Claude Code with no tools, no settings, no plugins and a one-line system prompt, and reads the limits from the events Claude Code prints. The call leaves no session log behind.
@@ -234,9 +235,10 @@ flowchart TD
 | **Formatting, parsing, aggregation, pricing** | *tested* | 27 unit tests |
 | **Log scan** | *tested* | Daily sums compared with an independent count of the same logs |
 | **Top bar item and menu, light and dark** | *tested* | Rendered in a headless GNOME Shell 50.5 with sample states |
-| **Limits from a probe** | *tested* | Run on 2026-10-12 while the week stood above its 75 % warning; whether a probe also reports the limits below every warning threshold is not confirmed |
+| **Limits from a probe** | *tested* | Run on 2026-10-12, both with the week above its 75 % warning and, after a reset, with the session at 4 % and the week at 0 % |
 | **Limits from the status line** | *tested* | A sample record is picked up and parsed, and a real record written by Claude Code was found on 2026-10-12 |
 | **Probe interval and the chevron** | *tested* | Clicked in the headless shell; the timing itself was not waited out |
+| **Ask now** | *tested* | Clicked twice in the headless shell: one probe ran, the button read "Asking…" and was inert until the new limits were shown |
 | **Colour styles** | *tested* | The derived blue equals the design system's own tokens in all 52 values; all five styles rendered, one chosen by a click and saved |
 | **Pause when idle** | *tested* | In the headless shell with a 2-second threshold and a virtual pointer: no probe or scan while idle, both after the first input. Suspend and the lock screen were not tried |
 | **Motion** | *built* | Runs without errors; not watched on a real screen |
