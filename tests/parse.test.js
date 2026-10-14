@@ -83,7 +83,7 @@ test('settings keep known values and fall back to 15 minutes and blue', () => {
     equal(PROBE_CHOICES, [5, 15, 30, 60, 0]);
     equal(parseSettings({probeMinutes: 60, style: 'green'}), {probeMinutes: 60, style: 'green'});
     equal(parseSettings({probeMinutes: 0}), {probeMinutes: 0, style: 'blue'});
-    equal(parseSettings({probeMinutes: 7, style: 'teal'}), {probeMinutes: 15, style: 'blue'});
+    equal(parseSettings({probeMinutes: 7, style: 'mauve'}), {probeMinutes: 15, style: 'blue'});
     equal(parseSettings({probeMinutes: '5', style: 3}), {probeMinutes: 15, style: 'blue'});
     equal(parseSettings(null), {probeMinutes: 15, style: 'blue'});
 });

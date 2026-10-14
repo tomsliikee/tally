@@ -31,3 +31,20 @@ export async function saveSettings(settings, cancellable) {
         // The choice still holds for this session; it is only not remembered.
     }
 }
+
+// Watches the file for edits from elsewhere: another of the extensions
+// handing on the colour style, or an edit by hand. The folder is watched,
+// since a save replaces the file. Returns a function that stops watching.
+export function watchSettings(onChange) {
+    try {
+        GLib.mkdir_with_parents(configDir(), 0o700);
+        const monitor = Gio.File.new_for_path(configDir()).monitor_directory(Gio.FileMonitorFlags.WATCH_MOVES, null);
+        monitor.connect('changed', (_monitor, file, other) => {
+            if (file?.get_basename() === 'settings.json' || other?.get_basename() === 'settings.json')
+                onChange();
+        });
+        return () => monitor.cancel();
+    } catch {
+        return () => {};
+    }
+}

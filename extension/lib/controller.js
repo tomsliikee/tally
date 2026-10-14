@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 import {LimitsSource} from './limits.js';
 import {LocalSource} from './local.js';
 import {PROBE_CHOICES, parseSettings, rollOver} from './parse.js';
-import {loadSettings, saveSettings} from './settings.js';
+import {loadSettings, saveSettings, watchSettings} from './settings.js';
 
 // The local scan is free; it also makes windows past their reset fall to zero.
 const TICK_SECONDS = 5 * 60;
@@ -48,6 +48,7 @@ export class Controller {
             return;
         this._probeMinutes = settings.probeMinutes;
         this._style = settings.style;
+        this._stopWatching = watchSettings(() => this._settingsEdited());
         const saved = await this._limitsSource.loadLast();
         if (this._destroyed)
             return;
@@ -94,6 +95,18 @@ export class Controller {
         // Read back through the parser, so an unknown name cannot be stored.
         this._style = parseSettings({style}).style;
         this._saveSettings();
+    }
+
+    // The file changed from outside; Tally's own saves read back the same.
+    async _settingsEdited() {
+        const settings = await loadSettings(this._cancellable);
+        if (this._destroyed)
+            return;
+        if (settings.style === this._style && settings.probeMinutes === this._probeMinutes)
+            return;
+        this._style = settings.style;
+        this._probeMinutes = settings.probeMinutes;
+        this._emit({});
     }
 
     _saveSettings() {
@@ -200,6 +213,7 @@ export class Controller {
 
     destroy() {
         this._destroyed = true;
+        this._stopWatching?.();
         this._cancellable.cancel();
         if (this._timer)
             GLib.source_remove(this._timer);
